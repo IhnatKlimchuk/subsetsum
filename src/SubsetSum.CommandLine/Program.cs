@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SubsetSum.CommandLine
@@ -26,7 +27,7 @@ namespace SubsetSum.CommandLine
                 }
             });
 
-            var result = await SolveAsync(options.Set, options.Sum.Value, loggerFactory);
+            var result = await SolveAsync(options.Sum.Value, options.Set, loggerFactory);
 
             if (result == null)
             {
@@ -38,11 +39,10 @@ namespace SubsetSum.CommandLine
             }
         }
 
-        private static Task<ICollection<uint>> SolveAsync(IEnumerable<uint> set, uint sum, ILoggerFactory loggerFactory)
+        private static async Task<IReadOnlyCollection<uint>> SolveAsync(uint sum, IEnumerable<uint> set, ILoggerFactory loggerFactory)
         {
-            ILogger logger = loggerFactory.CreateLogger("subsetsum");
-            logger.LogInformation("Emulating solving with no results.");
-            return Task.FromResult<ICollection<uint>>(null);
+            var solver = new UInt32RecursionSubsetSumSolver(loggerFactory.CreateLogger< UInt32RecursionSubsetSumSolver>());
+            return await solver.SolveAsync(sum, set, CancellationToken.None);
         }
     }
 }
