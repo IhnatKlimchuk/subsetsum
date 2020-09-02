@@ -29,5 +29,12 @@ namespace SubsetSum.Tests
             var result = await subsetSumSolver.SolveAsync(13, new uint[] { 3, 4, 8 }, CancellationToken.None);
             result.Should().BeNull();
         }
+
+        [Fact]
+        public async Task SolveAsync_should_result_correctly_without_overflow()
+        {
+            var result = await subsetSumSolver.SolveAsync(uint.MaxValue - 1, new uint[] { uint.MaxValue - 2, uint.MaxValue - 3,  5}, CancellationToken.None);
+            result.Should().BeNull();
+        }
     }
 }

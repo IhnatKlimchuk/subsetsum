@@ -20,26 +20,28 @@ namespace SubsetSum
         public Task<IReadOnlyCollection<uint>> SolveAsync(uint sum, IEnumerable<uint> set, CancellationToken cancellationToken)
         {
             logger.LogDebug("Starting calcultaion...");
-            var result = Solve(set.ToArray(), 0, sum, cancellationToken);
+            var result = Solve(set.ToArray(), sum, cancellationToken);
             logger.LogDebug("Calcultaion completed.");
             return Task.FromResult<IReadOnlyCollection<uint>>(result);
         }
 
-        public static IImmutableList<uint> Solve(ReadOnlySpan<uint> subSet, uint currentSum, uint requiredSum, CancellationToken cancellationToken)
+        public static IImmutableList<uint> Solve(ReadOnlySpan<uint> subSet, uint currentSum, CancellationToken cancellationToken)
         {
-            if (subSet.IsEmpty || currentSum > requiredSum || cancellationToken.IsCancellationRequested)
+            if (subSet.IsEmpty || cancellationToken.IsCancellationRequested)
             {
                 return null;
             }
 
-            var newSum = currentSum + subSet[0];
-            if (newSum == requiredSum)
+            if (subSet[0] == currentSum)
             {
-                return ImmutableList.Create(subSet[0]);
+                return ImmutableList.Create<uint>().Add(subSet[0]);
             }
-
-            var nextSubSet = subSet.Slice(1);
-            return Solve(nextSubSet, newSum, requiredSum, cancellationToken)?.Add(subSet[0]) ?? Solve(nextSubSet, currentSum, requiredSum, cancellationToken);
+            else
+            {
+                var nextSubSet = subSet.Slice(1);
+                return (subSet[0] > currentSum ? null : Solve(nextSubSet, currentSum - subSet[0], cancellationToken))?.Add(subSet[0])
+                    ?? Solve(nextSubSet, currentSum, cancellationToken);
+            }
         }
     }
 }
