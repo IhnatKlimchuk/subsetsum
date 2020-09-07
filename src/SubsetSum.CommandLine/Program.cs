@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -27,7 +28,7 @@ namespace SubsetSum.CommandLine
                 }
             });
 
-            var result = await SolveAsync(options.Sum.Value, options.Set, options.MaxConcurrency, loggerFactory);
+            var result = await SolveAsync(options.Sum.Value, options.Set.ToArray(), options.MaxConcurrency, loggerFactory);
 
             if (result == null)
             {
@@ -39,7 +40,7 @@ namespace SubsetSum.CommandLine
             }
         }
 
-        private static async Task<IReadOnlyCollection<uint>> SolveAsync(uint sum, IEnumerable<uint> set, uint maxConcurrency, ILoggerFactory loggerFactory)
+        private static async Task<IReadOnlyCollection<uint>> SolveAsync(uint sum, uint[] set, uint maxConcurrency, ILoggerFactory loggerFactory)
         {
             var solver = new UInt32RecursionSubsetSumSolver(
                 options: new AlgorithmOptions 

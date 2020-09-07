@@ -6,6 +6,6 @@ namespace SubsetSum
 {
     public interface ISubsetSumSolver<T>
     {
-        Task<IReadOnlyCollection<T>> SolveAsync(T sum, IEnumerable<T> set, CancellationToken cancellationToken);
+        Task<IReadOnlyCollection<T>> SolveAsync(T sum, T[] set, CancellationToken cancellationToken);
     }
 }

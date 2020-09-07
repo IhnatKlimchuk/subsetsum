@@ -21,7 +21,7 @@ namespace SubsetSum
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public Task<IReadOnlyCollection<uint>> SolveAsync(uint sum, IEnumerable<uint> set, CancellationToken cancellationToken)
+        public Task<IReadOnlyCollection<uint>> SolveAsync(uint sum, uint[] set, CancellationToken cancellationToken)
         {
             logger.LogDebug("Starting calcultaion...");
             var result = Solve(set.ToArray(), sum, cancellationToken);
