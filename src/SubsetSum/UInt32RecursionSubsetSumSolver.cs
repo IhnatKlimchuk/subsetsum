@@ -11,9 +11,13 @@ namespace SubsetSum
     public sealed class UInt32RecursionSubsetSumSolver : ISubsetSumSolver<uint>
     {
         private readonly ILogger logger;
+        private readonly AlgorithmOptions options;
 
-        public UInt32RecursionSubsetSumSolver(ILogger<UInt32RecursionSubsetSumSolver> logger)
+        public UInt32RecursionSubsetSumSolver(
+            AlgorithmOptions options, 
+            ILogger<UInt32RecursionSubsetSumSolver> logger)
         {
+            this.options = options ?? throw new ArgumentNullException(nameof(options));
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 

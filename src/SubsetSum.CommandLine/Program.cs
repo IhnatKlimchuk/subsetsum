@@ -27,7 +27,7 @@ namespace SubsetSum.CommandLine
                 }
             });
 
-            var result = await SolveAsync(options.Sum.Value, options.Set, loggerFactory);
+            var result = await SolveAsync(options.Sum.Value, options.Set, options.MaxConcurrency, loggerFactory);
 
             if (result == null)
             {
@@ -39,9 +39,14 @@ namespace SubsetSum.CommandLine
             }
         }
 
-        private static async Task<IReadOnlyCollection<uint>> SolveAsync(uint sum, IEnumerable<uint> set, ILoggerFactory loggerFactory)
+        private static async Task<IReadOnlyCollection<uint>> SolveAsync(uint sum, IEnumerable<uint> set, uint maxConcurrency, ILoggerFactory loggerFactory)
         {
-            var solver = new UInt32RecursionSubsetSumSolver(loggerFactory.CreateLogger< UInt32RecursionSubsetSumSolver>());
+            var solver = new UInt32RecursionSubsetSumSolver(
+                options: new AlgorithmOptions 
+                {
+                     MaxConcurrency = maxConcurrency
+                },
+                logger: loggerFactory.CreateLogger< UInt32RecursionSubsetSumSolver>());
             return await solver.SolveAsync(sum, set, CancellationToken.None);
         }
     }

@@ -13,7 +13,9 @@ namespace SubsetSum.Tests
 
         public UInt32RecursionSubsetSumSolverTests()
         {
-            subsetSumSolver = new UInt32RecursionSubsetSumSolver(Substitute.For<ILogger<UInt32RecursionSubsetSumSolver>>());
+            subsetSumSolver = new UInt32RecursionSubsetSumSolver(
+                Substitute.For<AlgorithmOptions>(), 
+                Substitute.For<ILogger<UInt32RecursionSubsetSumSolver>>());
         }
         
         [Fact]
