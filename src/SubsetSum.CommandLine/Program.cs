@@ -45,9 +45,9 @@ namespace SubsetSum.CommandLine
             var solver = new UInt32RecursionSubsetSumSolver(
                 options: new AlgorithmOptions 
                 {
-                     MaxConcurrency = maxConcurrency
+                     MaxConcurrency = maxConcurrency > Environment.ProcessorCount ? (uint)Environment.ProcessorCount : maxConcurrency
                 },
-                logger: loggerFactory.CreateLogger< UInt32RecursionSubsetSumSolver>());
+                logger: loggerFactory.CreateLogger<UInt32RecursionSubsetSumSolver>());;
             return await solver.SolveAsync(sum, set, CancellationToken.None);
         }
     }
