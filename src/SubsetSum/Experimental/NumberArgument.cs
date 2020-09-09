@@ -25,36 +25,43 @@ namespace SubsetSum.Experimental
             IsNeutral = isNeutral;
         }
 
-        public static NumberArgument Parse(string original)
+        public static NumberArgument Parse(string number)
         {
-            var number = original.AsSpan();
-            
+            if(string.IsNullOrEmpty(number))
+            {
+                throw new ArgumentException($"{nameof(number)} can't be empty.");
+            }
+
+            var numberSpan = number.AsSpan();
             ReadOnlySpan<char> integerPart;
             ReadOnlySpan<char> fractionalPart;
-            int splitIndex = number.IndexOf(Dot);
+            int splitIndex = numberSpan.IndexOf(Dot);
             if (splitIndex >= 0)
             {
-                integerPart = number.Slice(0, splitIndex);
-                fractionalPart = number.Slice(splitIndex + 1);
+                integerPart = numberSpan.Slice(0, splitIndex);
+                fractionalPart = numberSpan.Slice(splitIndex + 1);
             }
             else
             {
-                integerPart = number;
+                integerPart = numberSpan;
                 fractionalPart = ReadOnlySpan<char>.Empty;
             }
 
             bool isNegative = false;
-            var firstCharacter = integerPart[0];
-            if (firstCharacter == Minus)
+            if (!integerPart.IsEmpty)
             {
-                isNegative = true;
-                integerPart = integerPart.Slice(1);
+                var firstCharacter = integerPart[0];
+                if (firstCharacter == Minus)
+                {
+                    isNegative = true;
+                    integerPart = integerPart.Slice(1);
+                }
+                else if (firstCharacter == Plus)
+                {
+                    integerPart = integerPart.Slice(1);
+                }
             }
-            else if (firstCharacter == Plus)
-            {
-                integerPart = integerPart.Slice(1);
-            }
-
+            
             integerPart = integerPart.TrimStart(Zero);
             fractionalPart = fractionalPart.TrimEnd(Zero);
 
@@ -62,10 +69,10 @@ namespace SubsetSum.Experimental
             char unknownCharacter = default;
             if (!IsOnlyDigits(integerPart, ref unknownCharacter, ref isNeutral) || !IsOnlyDigits(fractionalPart, ref unknownCharacter, ref isNeutral))
             {
-                throw new ArgumentException($"Unexpected symbol '{unknownCharacter}' in {number.ToString()}");
+                throw new ArgumentException($"Unexpected symbol '{unknownCharacter}' in {number}");
             }
 
-            return new NumberArgument(original, integerPart.ToString(), fractionalPart.ToString(), isNegative, isNeutral);
+            return new NumberArgument(number, integerPart.ToString(), fractionalPart.ToString(), !isNeutral && isNegative, isNeutral);
         }
 
         private static bool IsOnlyDigits(ReadOnlySpan<char> number, ref char unknownCharacter, ref bool isNeutral)
