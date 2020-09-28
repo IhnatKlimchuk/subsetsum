@@ -5,24 +5,25 @@ using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SubsetSum.Experimental
+namespace SubsetSum
 {
-    public class SubsetSumSolver : ISubsetSumSolver<string>
+    public class DynamicSubsetSumSolver : ISubsetSumSolver<NumberArgument>
     {
         private readonly ILogger logger;
         private readonly AlgorithmOptions options;
         private readonly CultureInfo cultureInfo;
 
-        public SubsetSumSolver(
+        public DynamicSubsetSumSolver(
             AlgorithmOptions options,
-            ILogger<UInt32RecursionSubsetSumSolver> logger)
+            CultureInfo cultureInfo,
+            ILogger logger)
         {
             this.options = options ?? throw new ArgumentNullException(nameof(options));
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            this.cultureInfo = CultureInfo.InvariantCulture;
+            this.cultureInfo = cultureInfo ?? throw new ArgumentNullException(nameof(cultureInfo));
         }
 
-        public Task<IReadOnlyCollection<string>> SolveAsync(string sum, string[] set, CancellationToken cancellationToken)
+        public Task<IReadOnlyCollection<NumberArgument>> SolveAsync(NumberArgument sum, NumberArgument[] set, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

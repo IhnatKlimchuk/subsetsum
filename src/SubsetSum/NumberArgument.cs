@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SubsetSum.Experimental
+namespace SubsetSum
 {
     public sealed class NumberArgument
     {
@@ -9,7 +9,7 @@ namespace SubsetSum.Experimental
         private const char Plus = '+';
         private const char Zero = '0';
         private const char Nine = '9';
-
+        
         public string Original { get; private set; }
         public string IntegerPart { get; private set; }
         public string FractionalPart { get; private set; }
@@ -73,6 +73,16 @@ namespace SubsetSum.Experimental
             }
 
             return new NumberArgument(number, integerPart.ToString(), fractionalPart.ToString(), !isNeutral && isNegative, isNeutral);
+        }
+
+        public void ReduceFractionalPart(int digitsCount)
+        {
+            if (digitsCount < FractionalPart.Length || digitsCount < 0)
+            {
+                throw new ApplicationException($"Failed to get rid of fractional part for {Original}.");
+            }
+            IntegerPart += FractionalPart.PadRight(digitsCount, Zero);
+            FractionalPart = string.Empty;
         }
 
         private static bool IsOnlyDigits(ReadOnlySpan<char> number, ref char unknownCharacter, ref bool isNeutral)

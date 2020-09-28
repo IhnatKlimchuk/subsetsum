@@ -14,7 +14,7 @@ namespace SubsetSum
 
         public UInt32RecursionSubsetSumSolver(
             AlgorithmOptions options, 
-            ILogger<UInt32RecursionSubsetSumSolver> logger)
+            ILogger logger)
         {
             this.options = options ?? throw new ArgumentNullException(nameof(options));
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));

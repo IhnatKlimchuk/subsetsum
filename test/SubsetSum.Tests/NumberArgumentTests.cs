@@ -1,5 +1,4 @@
-﻿using SubsetSum.Experimental;
-using System;
+﻿using System;
 using Xunit;
 
 namespace SubsetSum.Tests
